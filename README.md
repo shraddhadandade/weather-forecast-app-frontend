@@ -1,12 +1,23 @@
-# React + Vite
+Setup Instructions
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+1. Clone the repo
+   git clone https://github.com/shraddhadandade/weather-forecast-app-frontend.git
+   cd weather-forecast-app-frontend
 
-Currently, two official plugins are available:
+2. Backend Setup
+   cd backend
+   npm install
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+3. Create a .env file inside backend/:
 
-## Expanding the ESLint configuration
+   PORT=5000
+   MONGO_URI=mongodb+srv://shraddhadandade07:weatherApp123@weatherapp.83e8xhc.mongodb.net/?retryWrites=true&w=majority&appName=weatherApp
+   OPENWEATHER_API_KEY=e2a0362ed7754bbd89a1bfcb42b7709e
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+4. Run the backend:
+   npm start # or nodemon server.js if nodemon is installed
+
+5. Frontend Setup
+   cd frontend
+   npm install
+   npm run dev
