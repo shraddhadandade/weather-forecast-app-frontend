@@ -20,11 +20,11 @@ function App() {
   const [loading, setLoading] = useState(false); //shows spinner while fetching
   const [error, setError] = useState(""); //stores error messages if API fails
   const [unit, setUnit] = useState("metric"); // "metric" = °C, "imperial" = °F
-  const [options, setOptions] = useState([]);
-  const [favorites, setFavorites] = useState([]);
-  const isDataEmpty = !data || Object.keys(data).length === 0;
+  const [options, setOptions] = useState([]); // autocomplete suggestions
+  const [favorites, setFavorites] = useState([]); // saved cities from DB
+  const isDataEmpty = !data || Object.keys(data).length === 0; //check to show the “Enter a city…” text when nothing loaded
 
-  // fetch favorites once
+  // fetch favorites (one time on load)
   const fetchFavorites = async () => {
     try {
       const res = await axios.get("http://localhost:5000/api/cities");
@@ -60,7 +60,7 @@ function App() {
 
   // Calls both current weather and forecast APIs.
   const fetchWeather = async (query) => {
-    setLoading(true);
+    setLoading(true); //spinner or loading
     setError(""); // clear previous error immediately
     try {
       const weatherRes = await axios.get(
@@ -124,6 +124,7 @@ function App() {
     }
   };
 
+  // Debounce:reduces API calls while typing
   useEffect(() => {
     const delayDebounceFn = setTimeout(() => {
       fetchCitySuggestions(location);
@@ -157,18 +158,23 @@ function App() {
         aria-label="Weather search controls"
       >
         <Autocomplete
-          freeSolo
+          freeSolo //user can type anything
           options={Array.from(
+            //de-duplicate suggestions
             new Map(options.map((o) => [`${o.name}-${o.country}`, o])).values()
           )}
           getOptionLabel={(city) => `${city.name}, ${city.country}`}
-          renderOption={(props, city) => (
+          renderOption={(
+            props,
+            city //Controls how each suggestion is displayed
+          ) => (
             <li {...props} key={`${city.name}-${city.country}`}>
               {city.name}, {city.country}
             </li>
           )}
           inputValue={location}
           onInputChange={(e, newInput, reason) => {
+            //Keeps the TextField value in sync with your location state.
             if (reason === "input") setLocation(newInput);
           }}
           onChange={(e, value) => {
@@ -180,7 +186,9 @@ function App() {
             }
           }}
           sx={{ width: 340 }}
-          renderInput={(params) => (
+          renderInput={(
+            params //When a suggestion is selected, fetch weather for that city and clear the input.
+          ) => (
             <TextField
               {...params}
               label="Enter city"
@@ -200,7 +208,7 @@ function App() {
         />
 
         <Button
-          onClick={useMyLocation}
+          onClick={useMyLocation} //Calls the geolocation
           className="w-full sm:w-auto focus:outline-none bg-[#708090]"
           aria-label="Use my current location"
           sx={{
@@ -215,6 +223,7 @@ function App() {
         </Button>
 
         {/* °C / °F Toggle */}
+        {/* The switch flips your unit state */}
         <div
           className="flex items-center gap-2 text-black text-sm sm:text-base"
           role="group"
